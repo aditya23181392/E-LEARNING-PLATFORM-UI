@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>E-Learning Platform - Courses</title>
+<style>
+  :root {
+    --primary-color: #2563eb;
+    --secondary-color: #dbeafe;
+    --bg-color: #f9fafb;
+    --text-color: #1e293b;
+    --accent-color: #3b82f6;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background-color: var(--primary-color);
+    padding: 1rem 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 600;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  main {
+    flex-grow: 1;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  h2 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .course-list {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  }
+  .course-card {
+    background: white;
+    padding: 1rem 1.5rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  .course-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+  }
+  .course-desc {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    color: #384151;
+    margin-bottom: 1rem;
+  }
+  .progress-container {
+    margin-bottom: 1rem;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #e0e7ff;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-color);
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+  }
+  .btn {
+    align-self: flex-start;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover,
+  .btn:focus {
+    background: #1e40af;
+    outline: none;
+  }
+  footer {
+    background: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: auto;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>E-Learn</h1>
+  <nav>
+    <a href="index.html">Courses</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Available Courses</h2>
+  <div class="course-list" id="course-list">
+    <!-- Courses injected by JS -->
+  </div>
+</main>
+
+<footer>
+  &copy; 2024 E-Learn Platform
+</footer>
+
+<script>
+  // Sample course data
+  const courses = [
+    {
+      id: 'course1',
+      title: 'Introduction to JavaScript',
+      description: 'Learn the fundamentals of JavaScript, the programming language of the web.',
+      videoUrl: 'https://www.youtube.com/embed/W6NZfCO5SIk'
+    },
+    {
+      id: 'course2',
+      title: 'CSS Flexbox and Grid',
+      description: 'Master layout techniques using Flexbox and CSS Grid.',
+      videoUrl: 'https://www.youtube.com/embed/JJSoEo8JSnc'
+    },
+    {
+      id: 'course3',
+      title: 'React for Beginners',
+      description: 'Get started with React and build interactive UIs.',
+      videoUrl: 'https://www.youtube.com/embed/Dorf8i6lCuk'
+    }
+  ];
+
+  function getProgress(courseId) {
+    const progress = localStorage.getItem('progress-' + courseId);
+    return progress ? parseInt(progress) : 0;
+  }
+  function renderCourses() {
+    const listEl = document.getElementById('course-list');
+    listEl.innerHTML = '';
+    courses.forEach(course => {
+      const progress = getProgress(course.id);
+      const card = document.createElement('article');
+      card.className = 'course-card';
+      card.innerHTML = `
+        <h3 class="course-title">${course.title}</h3>
+        <p class="course-desc">${course.description}</p>
+        <div class="progress-container" aria-label="Progress for ${course.title}">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}">
+            <div class="progress-fill" style="width: ${progress}%;"></div>
+          </div>
+          <small>${progress}% completed</small>
+        </div>
+        <a href="course.html?id=${encodeURIComponent(course.id)}" class="btn" aria-label="Go to course ${course.title}">Start / Continue</a>
+      `;
+      listEl.appendChild(card);
+    });
+  }
+
+  renderCourses();
+</script>
+</body>
+</html>
+
